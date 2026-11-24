@@ -5,7 +5,7 @@
       Done when: `docker compose up -d` + app start -> /actuator/health is UP, Flyway V1 applied.
 - [x] T02 Entities + repositories for all tables. Done when: context-load test passes.
 - [x] T03 Auth (register/login, JWT, roles). Done when: AuthIntegrationTest passes.
-- [ ] T04 Seed runner (dev profile): 50 sections (capacity 30-60), 5,000 students, 1 admin.
+- [x] T04 Seed runner (dev profile): 50 sections (capacity 30-60), 5,000 students, 1 admin.
       Done when: counts verified by query.
 
 ## Phase 1: Correct DB-only booking (baseline)
