@@ -1,14 +1,12 @@
 # Progress (AI: read this first, update it last)
 ## Done
-- [x] T01 Scaffold Spring Boot 3 backend, Flyway V1 applied, health UP
-- [x] T02 Entities + repositories for all tables (context-load validated)
-- [x] T03 Auth: JWT (jjwt 0.12.6), BCrypt register/login, SecurityConfig, GlobalExceptionHandler.
-- [x] T04 Dev seed runner (CommandLineRunner): 1 admin, 5k students, 20 courses, 50 sections. SeedTest green.
+- [x] T01-T04 Setup, entities, auth, dev seeder
+- [x] T05 Catalog endpoints (GET /api/courses, /api/sections/{id})
 ## In progress
 - (none)
 ## Next (in order)
-1. T05 Catalog endpoints (GET /courses, /sections/{id})
+1. T06 BookingService.register() DB-only (conditional UPDATE + UNIQUE)
 ## Known issues
 - (none)
 ## Last session summary
-- T04 done: DataSeeder under "dev" profile batch-inserts seed data reusing 1 BCrypt hash; SeedTest verifies counts & idempotency on MySQL.
+- T05 done: Catalog endpoints implemented with DTOs and 1-query fetch. CatalogIntegrationTest green.
