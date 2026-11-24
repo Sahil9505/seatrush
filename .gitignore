@@ -1,0 +1,16 @@
+# build output
+target/
+build/
+dist/
+node_modules/
+*.class
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+# secrets and logs
+.env
+*.log
+# load test output (keep scripts, not results)
+loadtest/results/*
+!loadtest/results/.gitkeep
