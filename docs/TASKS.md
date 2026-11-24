@@ -3,7 +3,7 @@
 ## Phase 0: Setup
 - [x] T01 Scaffold Spring Boot 3 backend (web, data-jpa, validation, security, flyway-mysql, mysql, data-redis, actuator, lombok). Config reads docker-compose values.
       Done when: `docker compose up -d` + app start -> /actuator/health is UP, Flyway V1 applied.
-- [ ] T02 Entities + repositories for all tables. Done when: context-load test passes.
+- [x] T02 Entities + repositories for all tables. Done when: context-load test passes.
 - [ ] T03 Auth (register/login, JWT, roles). Done when: AuthIntegrationTest passes.
 - [ ] T04 Seed runner (dev profile): 50 sections (capacity 30-60), 5,000 students, 1 admin.
       Done when: counts verified by query.
