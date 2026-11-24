@@ -1,7 +1,7 @@
 # Tasks (one task = one AI session. Tick when done, then update PROGRESS.md)
 
 ## Phase 0: Setup
-- [ ] T01 Scaffold Spring Boot 3 backend (web, data-jpa, validation, security, flyway-mysql, mysql, data-redis, actuator, lombok). Config reads docker-compose values.
+- [x] T01 Scaffold Spring Boot 3 backend (web, data-jpa, validation, security, flyway-mysql, mysql, data-redis, actuator, lombok). Config reads docker-compose values.
       Done when: `docker compose up -d` + app start -> /actuator/health is UP, Flyway V1 applied.
 - [ ] T02 Entities + repositories for all tables. Done when: context-load test passes.
 - [ ] T03 Auth (register/login, JWT, roles). Done when: AuthIntegrationTest passes.

@@ -1,17 +1,11 @@
 # Progress (AI: read this first, update it last)
-
 ## Done
-- [x] Project docs and rules created (AGENTS.md, docs/*)
-- [x] V1 migration and docker-compose.yml drafted (not yet run)
-
+- [x] T01 Scaffold Spring Boot 3 backend, Flyway V1 applied, health UP
 ## In progress
 - (none)
-
 ## Next (in order)
-1. T01 Scaffold backend (see docs/TASKS.md)
-
+1. T02 Entities + repositories for all tables (see docs/TASKS.md)
 ## Known issues
 - (none)
-
 ## Last session summary
-- Nothing built yet.
+- T01 done: Spring Boot 3 backend up, Flyway V1 applied, /actuator/health is UP.
