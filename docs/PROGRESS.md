@@ -1,14 +1,13 @@
 # Progress (AI: read this first, update it last)
 ## Done
-- [x] T01-T04 Setup, entities, auth, dev seeder
-- [x] T05 Catalog endpoints (GET /api/courses, /api/sections/{id})
-- [x] T06 BookingService.register() DB-only
-- [x] T07 BookingConcurrencyTest (200 threads, 10-seat section, lock ordering fix)
+- [x] T01-T05 Setup, auth, dev seeder, catalog endpoints
+- [x] T06-T07 BookingService.register() DB-only & ConcurrencyTest
+- [x] T08 Drop endpoint (release seat, row reactivation logic)
 ## In progress
 - (none)
 ## Next (in order)
-1. T08 Drop endpoint (release seat, reactivate-row logic from D3)
+1. T09 k6 baseline script + verify.sql
 ## Known issues
 - (none)
 ## Last session summary
-- T07 done: Concurrency tests implemented & green; fixed S->X lock upgrade deadlock by running takeSeat before registration insert.
+- T08 done: Added drop() (D10 lock order), DELETE /api/registrations/{sectionId}, DropIntegrationTest (H2), DropConcurrencyTest (MySQL).

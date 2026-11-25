@@ -1,5 +1,6 @@
 package com.seatrush.service;
 
+import com.seatrush.dto.DropResponse;
 import com.seatrush.dto.MyRegistrationResponse;
 import com.seatrush.dto.RegistrationResponse;
 import com.seatrush.entity.Registration;
@@ -100,5 +101,36 @@ public class BookingService {
                 MyRegistrationResponse.class)
                 .setParameter("studentId", studentId)
                 .getResultList();
+    }
+
+    // Lock order: acquires the exclusive (X) lock on the section row via releaseSeat() FIRST,
+    // before touching/updating the registration row. This preserves the same lock order
+    // as register() (see D10) to prevent deadlocks under concurrent register and drop operations.
+    @Transactional
+    public DropResponse drop(Long studentId, Long sectionId) {
+        // 1. Plain read: registration for (student, section). Missing or not CONFIRMED -> 404 NOT_FOUND.
+        Registration registration = registrationRepository.findByStudentIdAndSectionId(studentId, sectionId)
+                .filter(r -> r.getStatus() == RegistrationStatus.CONFIRMED)
+                .orElseThrow(() -> new AppException("NOT_FOUND", "Registration not found or not active for section " + sectionId, HttpStatus.NOT_FOUND));
+
+        // 2. releaseSeat(sectionId) FIRST (takes the section X lock). 0 rows -> throw so nothing is committed.
+        int seatsReleased = sectionRepository.releaseSeat(sectionId);
+        if (seatsReleased == 0) {
+            throw new AppException("NOT_FOUND", "Section not found or no seats to release: " + sectionId, HttpStatus.NOT_FOUND);
+        }
+
+        // 3. Conditional update: UPDATE registrations SET status='DROPPED' WHERE id=? AND status='CONFIRMED'.
+        //    0 rows affected -> throw to roll back (this releases the seat from step 2).
+        int updated = entityManager.createNativeQuery(
+                "UPDATE registrations SET status = 'DROPPED' WHERE id = :id AND status = 'CONFIRMED'")
+                .setParameter("id", registration.getId())
+                .executeUpdate();
+        if (updated == 0) {
+            throw new AppException("NOT_FOUND", "Registration already dropped or not active", HttpStatus.NOT_FOUND);
+        }
+
+        registration.setStatus(RegistrationStatus.DROPPED);
+
+        return new DropResponse(sectionId, "DROPPED");
     }
 }

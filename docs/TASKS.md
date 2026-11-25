@@ -12,7 +12,7 @@
 - [x] T05 Catalog endpoints (GET /courses, /sections/{id}).
 - [x] T06 BookingService.register() DB-only (conditional UPDATE + UNIQUE, one transaction).
 - [x] T07 ConcurrencyTest: 200 threads, 10-seat section -> exactly 10 CONFIRMED, 0 over capacity.
-- [ ] T08 Drop endpoint (release seat, reactivate-row logic from D3).
+- [x] T08 Drop endpoint (release seat, reactivate-row logic from D3).
 - [ ] T09 k6 baseline script + verify.sql. Record numbers in docs/RESULTS.md.
 
 ## Phase 2: Safety and speed
