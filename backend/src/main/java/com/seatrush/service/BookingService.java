@@ -32,21 +32,34 @@ public class BookingService {
     // - seats_taken never exceeds capacity
     // - one registration row per (student, section)
     // - all booking writes go through BookingService
+    // - takeSeat first so the exclusive row lock is acquired before the FK check's shared lock;
+    //   taking it last causes S->X lock upgrade deadlocks under concurrency.
     @Transactional
     public RegistrationResponse register(Long studentId, Long sectionId) {
-        // 1. Load section; unknown id -> 404 NOT_FOUND.
+        // 1. Load section (plain read); unknown id -> 404 NOT_FOUND.
         Section section = sectionRepository.findById(sectionId)
                 .orElseThrow(() -> new AppException("NOT_FOUND", "Section not found: " + sectionId, HttpStatus.NOT_FOUND));
 
-        // 2. Look up the existing registration for (student, section).
+        // 2. Fast path: plain non-locking read of the existing registration.
+        //    If CONFIRMED -> 409 ALREADY_REGISTERED immediately (no lock taken).
         Optional<Registration> existingOpt = registrationRepository.findByStudentIdAndSectionId(studentId, sectionId);
-        Long registrationId;
+        if (existingOpt.isPresent() && existingOpt.get().getStatus() == RegistrationStatus.CONFIRMED) {
+            throw new AppException("ALREADY_REGISTERED", "Already registered for section " + sectionId, HttpStatus.CONFLICT);
+        }
 
+        // 3. takeSeat(sectionId) FIRST. 0 rows affected -> throw SECTION_FULL (nothing else done yet).
+        int seatsTakenUpdated = sectionRepository.takeSeat(sectionId);
+        if (seatsTakenUpdated == 0) {
+            throw new AppException("SECTION_FULL", "Section " + sectionId + " is full", HttpStatus.CONFLICT);
+        }
+
+        // 4. Then reactivate (conditional UPDATE ... WHERE status='DROPPED') or insert the registration.
+        //    Any failure here (unique violation, 0 rows on reactivate) -> let the exception propagate so the
+        //    transaction rolls back and the seat from step 3 is released. Map to ALREADY_REGISTERED.
+        Long registrationId;
         if (existingOpt.isPresent()) {
             Registration existing = existingOpt.get();
-            if (existing.getStatus() == RegistrationStatus.CONFIRMED) {
-                throw new AppException("ALREADY_REGISTERED", "Already registered for section " + sectionId, HttpStatus.CONFLICT);
-            } else if (existing.getStatus() == RegistrationStatus.DROPPED) {
+            if (existing.getStatus() == RegistrationStatus.DROPPED) {
                 int updated = entityManager.createNativeQuery(
                         "UPDATE registrations SET status = 'CONFIRMED' WHERE id = :id AND status = 'DROPPED'")
                         .setParameter("id", existing.getId())
@@ -71,15 +84,6 @@ public class BookingService {
             } catch (DataIntegrityViolationException e) {
                 throw new AppException("ALREADY_REGISTERED", "Already registered for section " + sectionId, HttpStatus.CONFLICT);
             }
-        }
-
-        // 3. LAST, call takeSeat(sectionId). 0 rows affected -> throw SECTION_FULL so the whole
-        //    transaction rolls back (including the registration row from step 2).
-        // Reason for the order: the takeSeat UPDATE locks the hot section row until commit,
-        // so it must come last to keep that lock held for as short a time as possible.
-        int seatsTakenUpdated = sectionRepository.takeSeat(sectionId);
-        if (seatsTakenUpdated == 0) {
-            throw new AppException("SECTION_FULL", "Section " + sectionId + " is full", HttpStatus.CONFLICT);
         }
 
         return new RegistrationResponse(registrationId, sectionId, RegistrationStatus.CONFIRMED);

@@ -15,3 +15,5 @@ D6. Waitlist ordered by created_at (ms precision). Promotion happens inside the 
     DB transaction as the drop.
 D7. Auth: JWT, roles STUDENT and ADMIN.
 D8. Redis seat counters are rebuilt from MySQL on startup and via an admin endpoint.
+D10. takeSeat runs BEFORE the registration insert. Reason: InnoDB FK check takes an S lock on the sections row; a later UPDATE needs X; concurrent S->X upgrades deadlock. Supersedes the ordering reasoning in T06.
+
