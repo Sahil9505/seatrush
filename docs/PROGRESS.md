@@ -2,11 +2,12 @@
 ## Done
 - [x] T01-T04 Setup, entities, auth, dev seeder
 - [x] T05 Catalog endpoints (GET /api/courses, /api/sections/{id})
+- [x] T06 BookingService.register() DB-only
 ## In progress
 - (none)
 ## Next (in order)
-1. T06 BookingService.register() DB-only (conditional UPDATE + UNIQUE)
+1. T07 ConcurrencyTest (200 threads, 10-seat section)
 ## Known issues
 - (none)
 ## Last session summary
-- T05 done: Catalog endpoints implemented with DTOs and 1-query fetch. CatalogIntegrationTest green.
+- T06 done: BookingService.register() DB-only and endpoints implemented; RegistrationIntegrationTest green.
