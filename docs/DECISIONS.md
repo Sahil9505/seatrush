@@ -17,3 +17,6 @@ D7. Auth: JWT, roles STUDENT and ADMIN.
 D8. Redis seat counters are rebuilt from MySQL on startup and via an admin endpoint.
 D10. takeSeat runs BEFORE the registration insert. Reason: InnoDB FK check takes an S lock on the sections row; a later UPDATE needs X; concurrent S->X upgrades deadlock. Supersedes the ordering reasoning in T06.
 
+D11. Pivot: SeatRush becomes a train seat booking engine; docs/SPEC.md is the source of truth. Course version tagged v1-course-registration. Supersedes D2 (counter claim), D3 (row reuse) and D6 (FIFO waitlist). D1, D4, D5, D7, D9 and D10 still apply (D8: counters become seat masks).
+D12. Migrations squashed: V1__init.sql is replaced by the train schema. Allowed because nothing is deployed; dev DBs are recreated.
+D13. Course-version T09 baseline skipped; the k6 harness is built once for the train version (K1).
