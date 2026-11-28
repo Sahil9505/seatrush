@@ -3,9 +3,9 @@ package com.seatrush.service;
 import com.seatrush.dto.AuthResponse;
 import com.seatrush.dto.LoginRequest;
 import com.seatrush.dto.RegisterRequest;
-import com.seatrush.entity.Student;
+import com.seatrush.entity.User;
 import com.seatrush.exception.AppException;
-import com.seatrush.repository.StudentRepository;
+import com.seatrush.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,37 +16,33 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
     @Transactional
     public void register(RegisterRequest req) {
-        if (studentRepository.findByEmail(req.email()).isPresent()) {
+        if (userRepository.findByEmail(req.email()).isPresent()) {
             throw new AppException("DUPLICATE", "Email already registered", HttpStatus.CONFLICT);
         }
-        if (studentRepository.findByRollNo(req.rollNo()).isPresent()) {
-            throw new AppException("DUPLICATE", "Roll number already registered", HttpStatus.CONFLICT);
-        }
-        Student student = Student.builder()
-                .rollNo(req.rollNo())
+        User user = User.builder()
                 .name(req.name())
                 .email(req.email())
                 .passwordHash(passwordEncoder.encode(req.password()))
                 .build();
-        studentRepository.save(student);
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest req) {
-        Student student = studentRepository.findByEmail(req.email())
+        User user = userRepository.findByEmail(req.email())
                 .orElseThrow(() -> new AppException("UNAUTHORIZED", "Invalid credentials", HttpStatus.UNAUTHORIZED));
 
-        if (!passwordEncoder.matches(req.password(), student.getPasswordHash())) {
+        if (!passwordEncoder.matches(req.password(), user.getPasswordHash())) {
             throw new AppException("UNAUTHORIZED", "Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
 
-        String token = jwtService.generateToken(student.getId(), student.getRole().name());
-        return new AuthResponse(token, student.getRole().name());
+        String token = jwtService.generateToken(user.getId(), user.getRole().name());
+        return new AuthResponse(token, user.getRole().name());
     }
 }

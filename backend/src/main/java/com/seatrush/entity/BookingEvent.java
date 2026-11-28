@@ -13,28 +13,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "audit_log")
+@Table(name = "booking_events")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuditLog {
+public class BookingEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "event_type", length = 40, nullable = false)
-    private String eventType;
+    @Column(name = "booking_id", nullable = false)
+    private Long bookingId;
 
-    @Column(name = "student_id")
-    private Long studentId;
+    @Column(name = "from_status", length = 20)
+    private String fromStatus;
 
-    @Column(name = "section_id")
-    private Long sectionId;
-
-    @Column(name = "detail", length = 255)
-    private String detail;
+    @Column(name = "to_status", length = 20, nullable = false)
+    private String toStatus;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private Instant createdAt;

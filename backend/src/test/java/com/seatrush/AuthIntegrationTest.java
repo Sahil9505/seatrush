@@ -31,7 +31,7 @@ class AuthIntegrationTest {
     private static String jwtToken;
 
     private static final RegisterRequest VALID_REGISTER = new RegisterRequest(
-            "CS001", "Alice", "alice@example.com", "password123"
+            "Alice", "alice@example.com", "password123"
     );
 
     // ------------------------------------------------------------------ register
@@ -57,7 +57,6 @@ class AuthIntegrationTest {
     @Test
     @Order(3)
     void login_success() {
-        // Ensure the student is registered first
         rest.postForEntity("/api/auth/register", VALID_REGISTER, Void.class);
 
         ResponseEntity<AuthResponse> resp = rest.postForEntity(
@@ -68,7 +67,7 @@ class AuthIntegrationTest {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resp.getBody()).isNotNull();
         assertThat(resp.getBody().token()).isNotBlank();
-        assertThat(resp.getBody().role()).isEqualTo("STUDENT");
+        assertThat(resp.getBody().role()).isEqualTo("USER");
 
         jwtToken = resp.getBody().token();
     }
@@ -87,14 +86,13 @@ class AuthIntegrationTest {
     @Test
     @Order(5)
     void protected_endpoint_without_token_returns_401() {
-        ResponseEntity<Void> resp = rest.getForEntity("/api/courses", Void.class);
+        ResponseEntity<Void> resp = rest.getForEntity("/api/stations", Void.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
     @Order(6)
     void protected_endpoint_with_valid_token_returns_not_401() {
-        // Ensure we have a token
         rest.postForEntity("/api/auth/register", VALID_REGISTER, Void.class);
         ResponseEntity<AuthResponse> loginResp = rest.postForEntity(
                 "/api/auth/login",
@@ -105,9 +103,8 @@ class AuthIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         ResponseEntity<Void> resp = rest.exchange(
-                "/api/courses", HttpMethod.GET, new HttpEntity<>(headers), Void.class);
+                "/api/stations", HttpMethod.GET, new HttpEntity<>(headers), Void.class);
 
-        // Security accepted the token — not 401 (may be 404 since /api/courses isn't implemented yet)
         assertThat(resp.getStatusCode()).isNotEqualTo(HttpStatus.UNAUTHORIZED);
     }
 }

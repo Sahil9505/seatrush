@@ -51,3 +51,4 @@ Source of truth: docs/SPEC.md. Do not change anything marked [FIXED] without ask
 - Tests: functional tests on H2 (profile "test"); concurrency and Redis tests on real MySQL/Redis from
   docker-compose (profile "mysqltest", schema seatrush_test, test data prefix "cc-"). H2 results are
   never used as concurrency evidence.
+- Entity column types must match the migration exactly (ddl-auto=validate). For CHAR(n) columns use @JdbcTypeCode(SqlTypes.CHAR)

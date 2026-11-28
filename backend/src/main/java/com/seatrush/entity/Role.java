@@ -1,6 +1,6 @@
 package com.seatrush.entity;
 
 public enum Role {
-    STUDENT,
+    USER,
     ADMIN
 }

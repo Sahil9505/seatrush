@@ -4,11 +4,11 @@ Strongest model: B01, B03, B05, B07, B08, K2. Cheaper model for the rest.
 
 ## Phase 0-1: Pivot and data model (SPEC 5, 14)
 - [x] P01 Pivot docs: SPEC.md, AGENTS.md, TASKS.md, PROGRESS.md in place; old docs moved to docs/archive/; D11-D13 appended.
-- [ ] P02 Squash schema and rename: replace V1__init.sql with the SPEC section 5 schema, new entities and repositories,
+- [x] P02 Squash schema and rename: replace V1__init.sql with the SPEC section 5 schema, new entities and repositories,
       mechanical rename Student -> User in auth code and tests (drop rollNo, schema has none), delete course-only code
       and tests (sections, registrations, takeSeat/releaseSeat, old waitlist, catalog, booking), update H2 schema.sql.
       Done when: app starts, Flyway applies the new V1, context-load test and AuthIntegrationTest pass.
-- [ ] P03 Folded into P02. Tick it together with P02.
+- [x] P03 Folded into P02. Tick it together with P02.
 - [ ] P04 Seed (dev profile): 6 stations, 2 trains with stops, 72 seats each, journeys, 1 admin, 5,000 users
       (one shared BCrypt hash, batch inserts, idempotent). Done when: SeedTest counts pass.
 

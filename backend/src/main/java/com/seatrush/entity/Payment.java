@@ -6,33 +6,34 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.sql.Types;
+import java.math.BigDecimal;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
 
 @Entity
-@Table(name = "courses")
+@Table(name = "payments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Course {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", length = 20, nullable = false, unique = true)
-    private String code;
+    @Column(name = "booking_id", nullable = false)
+    private Long bookingId;
 
-    @Column(name = "title", length = 150, nullable = false)
-    private String title;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amount;
 
-    @JdbcTypeCode(Types.TINYINT)
-    @Column(name = "credits", nullable = false)
-    @Builder.Default
-    private Integer credits = 3;
+    @Column(length = 20, nullable = false)
+    private String status;
+
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+    private Instant createdAt;
 }
