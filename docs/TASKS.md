@@ -9,7 +9,7 @@ Strongest model: B01, B03, B05, B07, B08, K2. Cheaper model for the rest.
       and tests (sections, registrations, takeSeat/releaseSeat, old waitlist, catalog, booking), update H2 schema.sql.
       Done when: app starts, Flyway applies the new V1, context-load test and AuthIntegrationTest pass.
 - [x] P03 Folded into P02. Tick it together with P02.
-- [ ] P04 Seed (dev profile): 6 stations, 2 trains with stops, 72 seats each, journeys, 1 admin, 5,000 users
+- [x] P04 Seed (dev profile): 6 stations, 2 trains with stops, 72 seats each, journeys, 1 admin, 5,000 users
       (one shared BCrypt hash, batch inserts, idempotent). Done when: SeedTest counts pass.
 
 ## Phase 2: The heart (SPEC 4)
