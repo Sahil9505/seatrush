@@ -16,6 +16,8 @@ Ideal result: exactly 10 bookings and 0 double-allocated seat-segments (50 seat-
 | Version | Run | Successes | Sold out | Rejected by DB constraint | Double-allocated seat-segments |
 |---|---|---|---|---|---|
 | B02 naive, no unique constraint | 1 | 100 | 0 | n/a | 45 of 50 |
+| B02 naive, no unique constraint | 2 | 100 | 0 | n/a | 25 of 50 |
+| B02 naive, no unique constraint | 3 | 82 | 18 | n/a | 50 of 50 |
 | B02 naive, with unique constraint | 1 | 6 | 0 | 94 | 0 |
 | B03 DB-correct (retry + constraint) |  |  |  |  |  |
 | B05 Redis-gated |  |  |  |  |  |
