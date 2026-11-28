@@ -1,0 +1,32 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	GIT_STATUS.txt
+	backend/src/main/java/com/seatrush/controller/BookingController.java
+	backend/src/main/java/com/seatrush/dto/BookingRequest.java
+	backend/src/main/java/com/seatrush/dto/BookingResponse.java
+	backend/src/main/java/com/seatrush/exception/ConflictingBookingException.java
+	backend/src/main/java/com/seatrush/exception/InvalidRouteException.java
+	backend/src/main/java/com/seatrush/exception/JourneyNotFoundException.java
+	backend/src/main/java/com/seatrush/exception/JourneyNotOpenException.java
+	backend/src/main/java/com/seatrush/exception/LockTimeoutException.java
+	backend/src/main/java/com/seatrush/exception/SoldOutException.java
+	backend/src/main/java/com/seatrush/service/BookingAttemptService.java
+	backend/src/main/java/com/seatrush/service/BookingService.java
+	backend/src/test/java/com/seatrush/BookingConcurrencyTest.java
+	backend/src/test/java/com/seatrush/BookingFunctionalTest.java
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+--- GIT DIFF ---
+
+
+--- RECENT COMMITS ---
+
+3871312 B02: results baseline
+3eac7cf B02: naive baseline + results
+07bff2e feat(availability): implement B01 bitmask logic and tests
+6c5c9b3 P04: dev seed data and SeedTest
+3fce081 P02: train schema squash, User rename
