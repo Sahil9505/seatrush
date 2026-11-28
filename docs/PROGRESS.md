@@ -1,15 +1,14 @@
 # Progress (AI: read this first, update it last)
 
 ## Done
-- [x] Course v1 (T01-T08, tagged v1-course-registration).
-- [x] P01 Pivot docs.
-- [x] P02 & P03 Schema squash: 11 tables/entities/repos, auth renamed, course code deleted.
-- [x] P04 Seed (dev profile): DataSeeder + SeedTest.
+- [x] Course v1 (T01-T08) & Pivot docs (P01).
+- [x] P02-P03 Schema squash & P04 Seed (dev profile).
+- [x] B01 Pure bitmask availability functions (SPEC 4).
 
 ## Next
-1. B01 Pure bitmask functions (SPEC 4)
+1. B02 Naive booking (SPEC 6, 7, 8)
 
 ## Known issues: none
 
 ## Last session summary
-- P04 done: DataSeeder and SeedTest created; verified seed counts and idempotency on MySQL.
+- B01 done: SegmentMask + SegmentMaskTest passing in 0.065s (6 tests).

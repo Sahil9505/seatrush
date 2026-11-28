@@ -13,7 +13,7 @@ Strongest model: B01, B03, B05, B07, B08, K2. Cheaper model for the rest.
       (one shared BCrypt hash, batch inserts, idempotent). Done when: SeedTest counts pass.
 
 ## Phase 2: The heart (SPEC 4)
-- [ ] B01 Pure bitmask functions (segment mask for a to b, overlap check, set and clear) with unit and
+- [x] B01 Pure bitmask functions (segment mask for a to b, overlap check, set and clear) with unit and
       property tests. No Spring, no DB, no Redis. Finish and pass before any B02+.
 
 ## Phase 3: Allocation and booking (SPEC 6, 7, 8)
