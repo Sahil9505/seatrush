@@ -17,7 +17,7 @@ Strongest model: B01, B03, B05, B07, B08, K2. Cheaper model for the rest.
       property tests. No Spring, no DB, no Redis. Finish and pass before any B02+.
 
 ## Phase 3: Allocation and booking (SPEC 6, 7, 8)
-- [ ] B02 Naive booking (read, check, write, no locking) in a test-only variant, plus a MySQL test that
+- [x] B02 Naive booking (read, check, write, no locking) in a test-only variant, plus a MySQL test that
       shows double allocation. This is the "before" in the before/after story.
 - [ ] B03 DB-correct booking: HELD booking and seat_allocations rows in one transaction, unique-constraint
       safety net, conflict -> clean 409. Concurrency test on MySQL (profile mysqltest).
