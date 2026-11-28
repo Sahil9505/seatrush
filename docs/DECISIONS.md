@@ -15,6 +15,7 @@ D6. Waitlist ordered by created_at (ms precision). Promotion happens inside the 
     DB transaction as the drop.
 D7. Auth: JWT, roles STUDENT and ADMIN.
 D8. Redis seat counters are rebuilt from MySQL on startup and via an admin endpoint.
+D9. Functional tests run on H2 (profile "test"). Concurrency and Redis tests run on real MySQL/Redis from docker-compose (profile "mysqltest", schema seatrush_test). H2 results are never used as concurrency evidence.
 D10. takeSeat runs BEFORE the registration insert. Reason: InnoDB FK check takes an S lock on the sections row; a later UPDATE needs X; concurrent S->X upgrades deadlock. Supersedes the ordering reasoning in T06.
 
 D11. Pivot: SeatRush becomes a train seat booking engine; docs/SPEC.md is the source of truth. Course version tagged v1-course-registration. Supersedes D2 (counter claim), D3 (row reuse) and D6 (FIFO waitlist). D1, D4, D5, D7, D9 and D10 still apply (D8: counters become seat masks).

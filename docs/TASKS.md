@@ -3,7 +3,7 @@ Course-version tasks T01-T08 are done and tagged v1-course-registration.
 Strongest model: B01, B03, B05, B07, B08, K2. Cheaper model for the rest.
 
 ## Phase 0-1: Pivot and data model (SPEC 5, 14)
-- [ ] P01 Pivot docs: SPEC.md, AGENTS.md, TASKS.md, PROGRESS.md in place; old docs moved to docs/archive/; D11-D13 appended.
+- [x] P01 Pivot docs: SPEC.md, AGENTS.md, TASKS.md, PROGRESS.md in place; old docs moved to docs/archive/; D11-D13 appended.
 - [ ] P02 Squash schema and rename: replace V1__init.sql with the SPEC section 5 schema, new entities and repositories,
       mechanical rename Student -> User in auth code and tests (drop rollNo, schema has none), delete course-only code
       and tests (sections, registrations, takeSeat/releaseSeat, old waitlist, catalog, booking), update H2 schema.sql.
