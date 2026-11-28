@@ -173,7 +173,7 @@ public class BookingService {
                 // On a deadlock or lock-timeout: roll back and retry from (a) without adding to triedSeats,
                 // at most 3 such retries per request, then fail with 503 and a clear error code (never SOLD_OUT).
                 lockTimeoutRetries++;
-                if (lockTimeoutRetries >= 3) {
+                if (lockTimeoutRetries > 3) {
                     throw new LockTimeoutException("Seat allocation failed due to lock contention after 3 retries");
                 }
                 try {
@@ -184,7 +184,7 @@ public class BookingService {
             } catch (Exception e) {
                 if (isLockContentionException(e)) {
                     lockTimeoutRetries++;
-                    if (lockTimeoutRetries >= 3) {
+                    if (lockTimeoutRetries > 3) {
                         throw new LockTimeoutException("Seat allocation failed due to lock contention after 3 retries");
                     }
                     try {

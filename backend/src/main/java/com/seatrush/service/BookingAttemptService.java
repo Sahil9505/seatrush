@@ -10,15 +10,18 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class BookingAttemptService {
+
+    private static final SecureRandom RANDOM = new SecureRandom();
+    private static final String PNR_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -26,29 +29,17 @@ public class BookingAttemptService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private volatile Boolean isH2 = null;
-
-    private boolean isH2Database() {
-        if (isH2 == null) {
-            synchronized (this) {
-                if (isH2 == null) {
-                    try {
-                        String dbName = jdbcTemplate.execute((org.springframework.jdbc.core.ConnectionCallback<String>) con ->
-                            con.getMetaData().getDatabaseProductName()
-                        );
-                        isH2 = dbName != null && dbName.toLowerCase().contains("h2");
-                    } catch (Exception e) {
-                        isH2 = false;
-                    }
-                }
-            }
+    private String generatePnr() {
+        StringBuilder sb = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
+            sb.append(PNR_CHARS.charAt(RANDOM.nextInt(PNR_CHARS.length())));
         }
-        return isH2;
+        return sb.toString();
     }
 
     /**
      * Executes in ONE new isolated transaction.
-     * Inserts the booking (HELD, hold_expires_at via DATE_ADD(NOW(), INTERVAL 10 MINUTE) in SQL),
+     * Inserts the booking (HELD, hold_expires_at via TIMESTAMPADD(MINUTE, 10, NOW()) in SQL),
      * then inserts the seat_allocations rows in ASCENDING segment_index order.
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -62,16 +53,12 @@ public class BookingAttemptService {
             int seatNo,
             BigDecimal price
     ) {
-        String pnr = "cc-" + UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+        String pnr = generatePnr();
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        String dateAddClause = isH2Database()
-            ? "DATEADD('MINUTE', 10, NOW())"
-            : "DATE_ADD(NOW(), INTERVAL 10 MINUTE)";
 
         String insertBookingSql =
             "INSERT INTO bookings (pnr, user_id, journey_id, from_stop_index, to_stop_index, status, seat_id, price, hold_expires_at) " +
-            "VALUES (?, ?, ?, ?, ?, 'HELD', ?, ?, " + dateAddClause + ")";
+            "VALUES (?, ?, ?, ?, ?, 'HELD', ?, ?, TIMESTAMPADD(MINUTE, 10, NOW()))";
 
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(

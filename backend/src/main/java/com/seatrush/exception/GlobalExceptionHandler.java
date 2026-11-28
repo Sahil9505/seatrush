@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse("ALREADY_REGISTERED", "Registration constraint violation", Instant.now()));
+                .body(new ErrorResponse("CONSTRAINT_VIOLATION", "Request conflicts with existing data", Instant.now()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
